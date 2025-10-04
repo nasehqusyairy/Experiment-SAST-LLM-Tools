@@ -1,0 +1,7 @@
+class result(BaseModel):
+    Q1: bool  
+    Q2: Literal["pathtraver", "hash", "trustbound", "crypto", "cmdi", "sqli", "weakrand", "ldapi", "xss", "securecookie", "xpathi"]  
+    Q3: int  
+    Q4: int  
+    Q5: Literal["FP", "TP"]  
+
