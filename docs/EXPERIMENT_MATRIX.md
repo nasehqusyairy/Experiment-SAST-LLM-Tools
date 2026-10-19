@@ -24,7 +24,7 @@ The Ciavatta baselines must follow their documented definitions. Do not create i
 
 Treat standard Gemma and Gemma with thinking enabled as separate configurations. Verify support and record the actual runtime setting.
 
-Do not apply the Gemma thinking variant to other models. In this implementation, Ollama `/api/show` was queried for each configured model and reported `thinking` for `gemma4:e4b`; the manager adds separate Gemma thinking scenario identities only when that capability is present. The optional scenarios reuse the same eight prompt configurations and do not create new prompt definitions. The support capability was verified; no thinking inference has been run.
+The manager adds distinct optional Gemma thinking scenario identities only when `/api/show` verifies support, and sends `think: false` for standard mode when the model supports an explicit thinking control. Runtime/model availability is checked live; no current environment claim is made by this document. Thinking inference is opt-in and has not been authorized as part of audit validation.
 
 ## Scenario identity
 

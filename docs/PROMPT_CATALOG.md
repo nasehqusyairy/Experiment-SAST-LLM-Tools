@@ -19,8 +19,8 @@ Each row below represents one valid prompt configuration. The `Prompt ID` identi
 
 | Configuration ID | Prompt ID | Source | SAST Condition | Description |
 |---|---|---|---|---|
-| `baseline-1` | `baseline-1` | Ciavatta et al. | `none` | Original LLM-only baseline. The LLM analyzes the Java source without SAST findings. |
-| `baseline-2` | `baseline-2` | Ciavatta et al. | `findsecbugs` | Original LLM + FindSecBugs baseline. The LLM receives the source and relevant static-analysis findings according to the paper's procedure. |
+| `baseline-1` | `baseline-1` | Ciavatta et al. (source evidence limited) | `none` | Repository-authored LLM-only operational adaptation; not verified as an exact paper reproduction. |
+| `baseline-2` | `baseline-2` | Ciavatta et al. (source evidence limited) | `findsecbugs` | Repository-authored LLM + FindSecBugs operational adaptation; not verified as an exact paper reproduction. |
 | `zero-shot-none` | `zero-shot` | Munson et al. | `none` | Zero-Shot strategy adapted to analyze source code without SAST findings. |
 | `zero-shot-findsecbugs` | `zero-shot` | Munson et al. | `findsecbugs` | Zero-Shot strategy adapted to use relevant FindSecBugs findings instead of the original paper's SAST context. |
 | `cot-none` | `cot` | Munson et al. | `none` | Chain-of-Thought strategy adapted to analyze source code without SAST findings. |
@@ -54,7 +54,7 @@ The source figures contain: (a) a Zero-Shot question asking whether the code con
 
 The Ciavatta reference is *Integration of Large Language Models (LLMs) and Static Analysis for Improving the Efficacy of Security Vulnerability Detection in Source Code*. Section 2.4 and Table 5 (printed page 7) verify general prompt techniques, including “You are a security assistant,” instruction framing, category context, FindSecBugs context, structured output, and internal/external response instructions. The paper does not establish the project labels `baseline-1` and `baseline-2` as named, fully specified procedures in the text evidence verified here. Accordingly, both are **operational adaptations**, not claimed exact reproductions: `baseline-1` uses repository-authored LLM-only prompt material; `baseline-2` uses repository-authored FindSecBugs-assisted prompt material. Exact paper-specific baseline wording/procedure remains an evidence gap. The pre-existing templates in `Prompt/FirstPrompt.py` and `Prompt/SecondPrompt.py` are repository-authored; they are not presented as verbatim paper quotations.
 
-Munson Figure prompts elicit stepwise reasoning (and ToT explicitly asks experts to share intermediate steps). The experiment runtime's adapted variants instead request a common JSON result with a brief evidence summary and prohibit hidden chain-of-thought disclosure. This is an additional, intentional output-format adaptation; it is not exact methodological reproduction and may affect comparability. The original source templates retain their Figure wording; the condition-specific adaptation files carry this output contract.
+Munson Figure prompts elicit stepwise reasoning (and ToT explicitly asks experts to share intermediate steps). The runtime adaptations instead instruct ToT experts to evaluate privately and return only the final decision and concise evidence summary; the version-2 ToT files record this change. All adapted Munson variants use the common JSON contract and prohibit hidden chain-of-thought disclosure. These output-contract/safety changes are documented adaptations, not exact methodological reproductions.
 
 The five version-controlled files under `prompts/` are the runtime source templates. `prompts/munson_adaptations/` contains condition-specific, versioned wording for removing or replacing SAST context; no runtime rewriting of the source files occurs. `experiment_config.json` maps the five source templates to exactly the eight valid configurations.
 
@@ -125,7 +125,7 @@ Requirements:
 - Store a brief rationale or evidence summary, not hidden chain-of-thought content.
 - Apply the same interpretation rules to all compared configurations wherever possible.
 
-For the Ciavatta-derived operational baselines, the repository-authored Q1–Q4 wording is retained; the runner normalizes legacy Q-line text or JSON Q fields into the common `{vulnerable,cwe,line,reason}` schema using Q1/Q3/Q4. The untouched model response remains the raw record. This conversion does not make the baselines paper-exact.
+For the Ciavatta-derived operational baselines, the repository-authored response formats differ: `baseline-1` asks for Q1–Q4; `baseline-2` asks for Q1–Q5. The runner requests JSON mode and accepts JSON objects with those Q-fields; the parser enforces Q1–Q4 for `baseline-1`, Q1–Q5 for `baseline-2`, validates the allowed Q2 category and Q5/Q1 consistency, then normalizes into `{vulnerable,cwe,line,reason}` using Q1/Q3/Q4. Q5 is a model-generated TP/FP answer, not ground truth; the evaluator never exposes expected labels. Legacy Q-line text parsing is supported for the same fields. The wording's “only three questions” phrase conflicts with its enumerated questions; the source templates are preserved, and the runtime contract is the enumerated Q-fields. Raw responses remain untouched. None of this makes the baselines paper-exact.
 
 If a source baseline requires a different original output format, document the conversion into the common evaluation schema and retain the original response.
 

@@ -1,0 +1,9 @@
+# Python-generated files
+__pycache__/
+*.py[cod]
+
+# Local experiment state and outputs (never commit by default)
+experiment_state.sqlite3
+experiment_state.sqlite3-*
+experiment_runs/
+summaries/

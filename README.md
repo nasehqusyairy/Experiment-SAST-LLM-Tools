@@ -8,13 +8,12 @@ The persistent CLI is the supported experiment entry point. It runs only an expl
 
 ```bash
 python3 runExperiment.py status
-python3 runExperiment.py validate
-python3 runExperiment.py task dataset completed --detail "verified local OWASP Benchmark Java v1.2"
-python3 runExperiment.py run --config zero-shot-none --model qwen2.5-coder:7b --dataset /path/benchmark.csv --sample BenchmarkTest00001
-python3 runExperiment.py summary --dataset /path/benchmark.csv --scenario-dir experiment_runs/qwen2.5-coder:7b__zero-shot-none__standard --output summaries/pilot.json
+python3 runExperiment.py validate --config zero-shot-none --model qwen2.5-coder:7b --dataset /path/benchmark.csv --dataset-manifest /path/dataset-manifest.json
+python3 runExperiment.py run --config zero-shot-none --model qwen2.5-coder:7b --dataset /path/benchmark.csv --dataset-manifest /path/dataset-manifest.json --sample "$SAMPLE_ID"
+python3 runExperiment.py summary --dataset /path/benchmark.csv --dataset-manifest /path/dataset-manifest.json --scenario-dir experiment_runs/SCENARIO_ID --output summaries/pilot.json
 ```
 
-The dataset CSV contract is described in `docs/EXPERIMENT_MANAGER.md`. Do not mark a setup task complete until it is verified. The full OWASP Benchmark Java v1.2 dataset and its label mapping are not bundled. FindSecBugs output must be verified and sample-keyed before running any SAST configuration. The three standard models and optional Gemma thinking capability are checked through the local Ollama API.
+The dataset, normalized sample-keyed ground-truth mapping, provenance manifest, and FindSecBugs artifacts are not bundled. A manual task status cannot satisfy those prerequisites; `validate` and `run` recheck the files and current runtime. The selected sample's success is distinct from full-scenario completion: a scenario is complete only when its entire registered dataset scope has valid, checksum-matched predictions. See `docs/EXPERIMENT_MANAGER.md` for manifest schemas and validation exit codes. No runtime/model availability is claimed here; `validate` queries local Ollama without sending inference requests.
 
 The eight approved prompt configurations are separate from the five prompt source files. Runtime templates live in `prompts/`; Munson condition adaptations are version-controlled under `prompts/munson_adaptations/`. See `docs/PROMPT_CATALOG.md` for source status and deviations. Neither the CLI nor tests start the full matrix.
 
