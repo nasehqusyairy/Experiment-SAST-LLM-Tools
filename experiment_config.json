@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "dataset": {"required_samples": 2740, "identity": "OWASP Benchmark Java v1.2", "source": "user-configured; not bundled"},
+  "models": ["deepseek-coder:6.7b", "qwen2.5-coder:7b", "gemma4:e4b"],
+  "generation": {"temperature": 0.0, "top_p": 0.9, "top_k": 20, "repeat_penalty": 1.0},
+  "prompts": {
+    "baseline-1": {"prompt_id": "baseline-1", "version": "repo-adaptation-v1", "template": "prompts/baseline_1.txt", "sast": "none", "source_status": "repository-authored adaptation"},
+    "baseline-2": {"prompt_id": "baseline-2", "version": "repo-adaptation-v1", "template": "prompts/baseline_2.txt", "sast": "findsecbugs", "source_status": "repository-authored adaptation"},
+    "zero-shot-none": {"prompt_id": "zero-shot", "version": "munson-figure2-adaptation-v1", "template": "prompts/munson_adaptations/zero_shot_none_v1.txt", "source_template": "prompts/zero_shot.txt", "sast": "none", "source_status": "Munson Figure 2 strategy adapted: remove SAST context; add JSON contract"},
+    "zero-shot-findsecbugs": {"prompt_id": "zero-shot", "version": "munson-figure2-findsecbugs-adaptation-v1", "template": "prompts/munson_adaptations/zero_shot_findsecbugs_v1.txt", "source_template": "prompts/zero_shot.txt", "sast": "findsecbugs", "source_status": "Munson Figure 2 strategy adapted: replace Semgrep/SARIF with same-sample FindSecBugs; add JSON contract"},
+    "cot-none": {"prompt_id": "cot", "version": "munson-figure4-adaptation-v1", "template": "prompts/munson_adaptations/cot_none_v1.txt", "source_template": "prompts/cot.txt", "sast": "none", "source_status": "Munson Figure 4 strategy adapted: remove SAST-dependent instruction/context; add JSON contract"},
+    "cot-findsecbugs": {"prompt_id": "cot", "version": "munson-figure4-findsecbugs-adaptation-v1", "template": "prompts/munson_adaptations/cot_findsecbugs_v1.txt", "source_template": "prompts/cot.txt", "sast": "findsecbugs", "source_status": "Munson Figure 4 strategy adapted: replace Semgrep/SARIF with same-sample FindSecBugs; add JSON contract"},
+    "tot-none": {"prompt_id": "tot", "version": "munson-figure3-adaptation-v1", "template": "prompts/munson_adaptations/tot_none_v1.txt", "source_template": "prompts/tot.txt", "sast": "none", "source_status": "Munson Figure 3 strategy adapted: remove SAST-dependent step/context; add JSON contract"},
+    "tot-findsecbugs": {"prompt_id": "tot", "version": "munson-figure3-findsecbugs-adaptation-v1", "template": "prompts/munson_adaptations/tot_findsecbugs_v1.txt", "source_template": "prompts/tot.txt", "sast": "findsecbugs", "source_status": "Munson Figure 3 strategy adapted: replace Semgrep/SARIF with same-sample FindSecBugs; add JSON contract"}
+  },
+  "thinking": {"standard": false, "gemma_thinking": "Ollama /api/show reports 'thinking' for gemma4:e4b; scenario remains opt-in and should be separately audited"}
+}
